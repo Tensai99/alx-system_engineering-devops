@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# customizing 404 page
+
+sudo apt-get update
+sudo apt-get -y install nginx
+
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/Tensai99;"
+
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+
+# creating a 404 error page
+
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+string_to_replace="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+
+sudo sed -i "s/listen 80 default_server;/$string_to_replace/" /etc/nginx/sites-enabled/default
+
+sudo service nginx restart
