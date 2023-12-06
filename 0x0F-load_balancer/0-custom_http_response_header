@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# customizing 404 page
+# configuring new server
 
 sudo apt-get update
 sudo apt-get -y install nginx
@@ -17,6 +17,9 @@ echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 string_for_error="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
 
 sudo sed -i "s/listen 80 default_server;/$string_for_error/" /etc/nginx/sites-enabled/default
+
+# Creating an HTTP response header
+sudo sed -i "/server_name _/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
 
 # Testing configurations for syntax errors
 sudo nginx -t
