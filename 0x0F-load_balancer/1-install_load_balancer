@@ -17,8 +17,8 @@ frontend  tensai99
         default_backend tensai99_backend
 backend tensai99_backend
         balance roundrobin
-        server 205551-web-01 34.229.161.17:80 check
-        server 205551-web-02 100.24.236.88:80 check
+        server 205551-web-01 34.202.234.206:80 check
+        server 205551-web-02 100.25.181.193:80 check
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
@@ -30,3 +30,4 @@ sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 
 # Restart the Nginx service
 sudo service haproxy restart
+
