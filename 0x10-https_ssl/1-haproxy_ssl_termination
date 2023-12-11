@@ -42,7 +42,7 @@ frontend  tensai99-frontend
         default_backend tensai99-backend
 
 frontend tensai99-frontend-https
-        bind *:433 ssl crt /etc/letsencrypt/live/www.tensaiverse.tech/www.tensaiverse.tech.pem
+        bind *:443 ssl crt /etc/letsencrypt/live/www.tensaiverse.tech/www.tensaiverse.tech.pem
         http-request set-header X-Forwarded-Proto https
         default_backend tensai99-backend
 
