@@ -34,14 +34,20 @@ defaults
         errorfile 504 /etc/haproxy/errors/504.http
 
 
-frontend  tensai99
-        bind *:433 ssl crt /etc/letsencrypt/live/www.tensaiverse.tech/www.tensaiverse.tech.pem
-        http-request add-header X-Forwarded-Proto http
-        http-request redirect scheme https if !{ ssl_fc }
-        use_backend tensai99_backend
+frontend  tensai99-frontend
+        bind *:80
+        mode http
+        http-request redirect scheme https code 301 unless { ssl_fc }
+        http-request set-header X_Forwarded-Proto http
+        default_backend tensai99-backend
 
-backend tensai99_backend
-        redirect scheme https if !{ ssl_fc }
-        server 205551-web-01 34.202.234.206:80
-        server 205551-web-02 100.25.181.193:80
+frontend tensai99-frontend-https
+        bind *:433 ssl crt /etc/letsencrypt/live/www.tensaiverse.tech/www.tensaiverse.tech.pem
+        http-request set-header X-Forwarded-Proto https
+        default_backend tensai99-backend
+
+backend tensai99-backend
+        balance roundrobin
+        server 205551-web-01 34.202.234.206:80 check
+        server 205551-web-02 100.25.181.193:80 check
 
